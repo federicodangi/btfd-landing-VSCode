@@ -794,11 +794,10 @@ const progressBar = document.getElementById('scrollProgress');
 let progressTicking = false;
 
 function updateScrollProgress() {
-    const scrollTop = root.scrollTop;
-    const scrollHeight = root.scrollHeight - getClientHeight();
-    const scrollPercentage = Math.max(0, Math.min(100, (scrollTop / scrollHeight) * 100));
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercentage = scrollHeight > 0 ? Math.max(0, Math.min(100, (scrollTop / scrollHeight) * 100)) : 0;
     progressBar.style.width = scrollPercentage + '%';
-    progressBar.style.display = 'block';
     progressTicking = false;
 }
 
@@ -823,7 +822,7 @@ let headerTicking = false;
 const isMobile = () => window.innerWidth < 768;
 
 function updateHeader() {
-    const scrollTop = root.scrollTop;
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
     if (isMobile()) {
         // Mobile: nascondi header quando scroll down, mostra quando scroll up
@@ -843,7 +842,7 @@ function updateHeader() {
         }
     }
 
-    lastScrollTop = scrollTop;
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
     headerTicking = false;
 }
 
