@@ -428,42 +428,33 @@
             }
         }
 
-        /* Scroll Progress Bar - SEMPRE sopra tutto */
+        /* Scroll Progress Bar - Container */
         .scroll-progress {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            width: 1%;
-            min-width: 4px;
             height: 4px;
-            background: linear-gradient(90deg, var(--accent), var(--accent-dark));
-            z-index: 999999 !important;
-            transition: none;
+            z-index: 999999;
             pointer-events: none;
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            box-shadow: 0 1px 3px rgba(230, 126, 34, 0.6) !important;
-            transform: translate3d(0, 0, 0);
-            backface-visibility: hidden;
-            will-change: width;
         }
 
-        /* Forza la progress bar sopra TUTTO su mobile */
-        @media (max-width: 767px) {
-            .scroll-progress {
-                position: fixed !important;
-                top: 0 !important;
-                z-index: 999999 !important;
-                transform: translate3d(0, 0, 0) !important;
-            }
+        /* Scroll Progress Bar - Inner (animated) */
+        .scroll-progress-inner {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+            transform: scaleX(0);
+            transform-origin: left;
+            will-change: transform;
+            box-shadow: 0 1px 3px rgba(230, 126, 34, 0.6);
         }
     </style>
 </head>
 <body>
 
-<div class="scroll-progress" id="scrollProgress"></div>
+<div class="scroll-progress" role="presentation" aria-hidden="true">
+  <div id="scrollProgress" class="scroll-progress-inner"></div>
+</div>
 
 <header>
     <div class="header-content">
@@ -814,15 +805,10 @@ let progressTicking = false;
 function updateScrollProgress() {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const scrollPercentage = scrollHeight > 0 ? Math.max(0, Math.min(100, (scrollTop / scrollHeight) * 100)) : 0;
+    const scrollPercentage = scrollHeight > 0 ? (scrollTop / scrollHeight) : 0;
 
-    // Force visibility
     if (progressBar) {
-        progressBar.style.width = scrollPercentage + '%';
-        progressBar.style.visibility = 'visible';
-        progressBar.style.opacity = '1';
-        progressBar.style.display = 'block';
-        progressBar.style.zIndex = '999999';
+        progressBar.style.transform = `scaleX(${scrollPercentage})`;
     }
 
     progressTicking = false;
