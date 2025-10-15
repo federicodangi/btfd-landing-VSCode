@@ -436,15 +436,18 @@
             right: 0;
             width: 1%;
             min-width: 4px;
-            height: 6px;
+            height: 4px;
             background: linear-gradient(90deg, var(--accent), var(--accent-dark));
             z-index: 999999 !important;
-            transition: width 0.15s linear;
+            transition: none;
             pointer-events: none;
             display: block !important;
             visibility: visible !important;
             opacity: 1 !important;
-            box-shadow: 0 2px 8px rgba(230, 126, 34, 0.8) !important;
+            box-shadow: 0 1px 3px rgba(230, 126, 34, 0.6) !important;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            will-change: width;
         }
 
         /* Forza la progress bar sopra TUTTO su mobile */
@@ -453,6 +456,7 @@
                 position: fixed !important;
                 top: 0 !important;
                 z-index: 999999 !important;
+                transform: translate3d(0, 0, 0) !important;
             }
         }
     </style>
