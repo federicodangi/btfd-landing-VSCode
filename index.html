@@ -381,7 +381,7 @@
             color: var(--text-light);
             line-height: 1.6;
         }
-        
+
         @media (max-width: 600px) {
             .author-box {
                 flex-direction: column;
@@ -389,9 +389,24 @@
                 text-align: center;
             }
         }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+            z-index: 9999;
+            transition: width 0.1s ease-out;
+            box-shadow: 0 2px 4px rgba(230, 126, 34, 0.3);
+        }
     </style>
 </head>
 <body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
 
 <header>
     <div class="header-content">
@@ -734,6 +749,28 @@ addEventListener('resize', onScroll, { passive: true });
 if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', onScroll, { passive: true });
 }
+
+// Scroll Progress Bar
+const progressBar = document.getElementById('scrollProgress');
+let progressTicking = false;
+
+function updateScrollProgress() {
+    const scrollTop = root.scrollTop;
+    const scrollHeight = root.scrollHeight - getClientHeight();
+    const scrollPercentage = (scrollTop / scrollHeight) * 100;
+    progressBar.style.width = scrollPercentage + '%';
+    progressTicking = false;
+}
+
+function onScrollProgress() {
+    if (!progressTicking) {
+        requestAnimationFrame(updateScrollProgress);
+        progressTicking = true;
+    }
+}
+
+addEventListener('scroll', onScrollProgress, { passive: true });
+addEventListener('resize', onScrollProgress, { passive: true });
 </script>
 
 </body>
