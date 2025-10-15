@@ -431,6 +431,7 @@
             top: 0;
             left: 0;
             width: 0%;
+            min-width: 2px;
             height: 4px;
             background: linear-gradient(90deg, var(--accent), var(--accent-dark));
             z-index: 99999;
@@ -439,6 +440,9 @@
             pointer-events: none;
             will-change: width;
             contain: layout style paint;
+            display: block;
+            visibility: visible;
+            opacity: 1;
         }
 
         /* Assicura che la progress bar sia sempre visibile */
@@ -807,8 +811,9 @@ let progressTicking = false;
 function updateScrollProgress() {
     const scrollTop = root.scrollTop;
     const scrollHeight = root.scrollHeight - getClientHeight();
-    const scrollPercentage = (scrollTop / scrollHeight) * 100;
+    const scrollPercentage = Math.max(0, Math.min(100, (scrollTop / scrollHeight) * 100));
     progressBar.style.width = scrollPercentage + '%';
+    progressBar.style.display = 'block';
     progressTicking = false;
 }
 
@@ -821,6 +826,10 @@ function onScrollProgress() {
 
 addEventListener('scroll', onScrollProgress, { passive: true });
 addEventListener('resize', onScrollProgress, { passive: true });
+
+// Inizializza progress bar al caricamento
+window.addEventListener('DOMContentLoaded', updateScrollProgress);
+window.addEventListener('load', updateScrollProgress);
 
 // Header Hide/Show on Mobile + Transparency on Desktop
 const header = document.querySelector('header');
