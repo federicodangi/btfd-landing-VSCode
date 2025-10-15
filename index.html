@@ -429,8 +429,8 @@
             }
         }
 
-        /* Scroll Progress Bar - Container */
-        .scroll-progress {
+        /* Scroll Progress Bar - ESATTO COME LANDING FUNZIONANTE */
+        #scroll-progress {
             position: fixed;
             top: 0;
             left: 0;
@@ -438,34 +438,21 @@
             height: 4px;
             z-index: 999999;
             pointer-events: none;
-            isolation: isolate;
-            contain: layout style;
         }
 
-        /* Forza progress bar SEMPRE visibile su mobile */
-        @media (max-width: 767px) {
-            .scroll-progress {
-                position: fixed !important;
-                top: 0 !important;
-                z-index: 9999999 !important;
-            }
-        }
-
-        /* Scroll Progress Bar - Inner (animated) */
-        .scroll-progress-inner {
+        #scroll-progress__inner {
             height: 100%;
             background: linear-gradient(90deg, var(--accent), var(--accent-dark));
             transform: scaleX(0);
             transform-origin: left;
             will-change: transform;
-            box-shadow: 0 1px 3px rgba(230, 126, 34, 0.6);
         }
     </style>
 </head>
 <body>
 
-<div class="scroll-progress" role="presentation" aria-hidden="true">
-  <div id="scrollProgress" class="scroll-progress-inner"></div>
+<div id="scroll-progress" class="scroll-progress" role="presentation" aria-hidden="true">
+  <div id="scroll-progress__inner" class="scroll-progress-inner"></div>
 </div>
 
 <header>
@@ -812,7 +799,7 @@ if (window.visualViewport) {
 
 // Scroll Progress Bar - CODICE ESATTO DALLA LANDING FUNZIONANTE
 (function () {
-    var inner = document.getElementById('scrollProgress');
+    var inner = document.getElementById('scroll-progress__inner');
     if (!inner) return;
 
     function setProgress() {
