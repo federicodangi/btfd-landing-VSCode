@@ -105,19 +105,13 @@
             }
         }
 
-        /* Mobile: header nascosto quando scroll down */
+        /* Mobile: header RIMANE FISSO (non si nasconde più) */
         @media (max-width: 767px) {
             header {
                 padding: 12px 16px;
                 padding-top: 16px;
                 backdrop-filter: none;
                 background: rgba(255, 255, 255, 0.98);
-                transition: top 0.3s ease-in-out, background 0.3s ease;
-            }
-
-            header.hidden {
-                top: -200px;
-                transform: none;
             }
         }
 
@@ -838,17 +832,8 @@ const isMobile = () => window.innerWidth < 768;
 function updateHeader() {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
-    if (isMobile()) {
-        // Mobile: nascondi header quando scroll down, mostra quando scroll up
-        if (scrollTop > lastScrollTop && scrollTop > 100) {
-            // Scroll down - nascondi
-            header.classList.add('hidden');
-        } else {
-            // Scroll up - mostra
-            header.classList.remove('hidden');
-        }
-    } else {
-        // Desktop: aggiungi classe scrolled per trasparenza
+    // Desktop: aggiungi classe scrolled per trasparenza
+    if (!isMobile()) {
         if (scrollTop > 50) {
             header.classList.add('scrolled');
         } else {
