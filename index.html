@@ -434,12 +434,25 @@
             top: 0;
             left: 0;
             right: 0;
-            width: 0%;
+            width: 1%;
+            min-width: 4px;
             height: 4px;
             background: linear-gradient(90deg, var(--accent), var(--accent-dark));
-            z-index: 99999;
+            z-index: 999999 !important;
             transition: width 0.15s linear;
             pointer-events: none;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* Forza la progress bar sopra TUTTO su mobile */
+        @media (max-width: 767px) {
+            .scroll-progress {
+                position: fixed !important;
+                top: 0 !important;
+                z-index: 999999 !important;
+            }
         }
     </style>
 </head>
@@ -797,7 +810,16 @@ function updateScrollProgress() {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
     const scrollPercentage = scrollHeight > 0 ? Math.max(0, Math.min(100, (scrollTop / scrollHeight) * 100)) : 0;
-    progressBar.style.width = scrollPercentage + '%';
+
+    // Force visibility
+    if (progressBar) {
+        progressBar.style.width = scrollPercentage + '%';
+        progressBar.style.visibility = 'visible';
+        progressBar.style.opacity = '1';
+        progressBar.style.display = 'block';
+        progressBar.style.zIndex = '999999';
+    }
+
     progressTicking = false;
 }
 
