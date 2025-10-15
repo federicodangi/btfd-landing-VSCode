@@ -809,6 +809,13 @@ function updateScrollProgress() {
 
     if (progressBar) {
         progressBar.style.transform = `scaleX(${scrollPercentage})`;
+
+        // DEBUG: aggiungi un bordo rosso per vedere se l'elemento esiste
+        progressBar.style.border = '2px solid red';
+
+        // DEBUG: Forza visibility
+        progressBar.parentElement.style.display = 'block';
+        progressBar.parentElement.style.visibility = 'visible';
     }
 
     progressTicking = false;
