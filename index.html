@@ -112,10 +112,11 @@
                 padding-top: 16px;
                 backdrop-filter: none;
                 background: rgba(255, 255, 255, 0.98);
+                transition: top 0.3s ease-in-out, background 0.3s ease;
             }
 
             header.hidden {
-                top: -100vh;
+                top: -200px;
                 transform: none;
             }
         }
@@ -437,6 +438,17 @@
             height: 4px;
             z-index: 999999;
             pointer-events: none;
+            isolation: isolate;
+            contain: layout style;
+        }
+
+        /* Forza progress bar SEMPRE visibile su mobile */
+        @media (max-width: 767px) {
+            .scroll-progress {
+                position: fixed !important;
+                top: 0 !important;
+                z-index: 9999999 !important;
+            }
         }
 
         /* Scroll Progress Bar - Inner (animated) */
@@ -809,13 +821,6 @@ function updateScrollProgress() {
 
     if (progressBar) {
         progressBar.style.transform = `scaleX(${scrollPercentage})`;
-
-        // DEBUG: aggiungi un bordo rosso per vedere se l'elemento esiste
-        progressBar.style.border = '2px solid red';
-
-        // DEBUG: Forza visibility
-        progressBar.parentElement.style.display = 'block';
-        progressBar.parentElement.style.visibility = 'visible';
     }
 
     progressTicking = false;
