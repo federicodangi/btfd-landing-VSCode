@@ -84,7 +84,7 @@
         
         header {
             position: fixed;
-            top: 0;
+            top: 4px;
             left: 0;
             right: 0;
             z-index: 1000;
@@ -136,13 +136,13 @@
 
         @media (min-width: 768px) {
             main {
-                padding: 80px 32px 60px;
+                padding: 84px 32px 60px;
             }
         }
 
         @media (max-width: 767px) {
             main {
-                padding: 20px 20px 40px;
+                padding: 24px 20px 40px;
             }
         }
         
@@ -436,6 +436,8 @@
             box-shadow: 0 2px 4px rgba(230, 126, 34, 0.3);
             pointer-events: none;
             will-change: width;
+            transform: translateZ(0);
+            isolation: isolate;
         }
     </style>
 </head>
