@@ -83,20 +83,38 @@
         @media (min-width: 768px) { body { font-size: 18px; } }
         
         header {
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 1000;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--card-border);
             padding: 20px;
             box-shadow: 0 2px 8px var(--shadow);
+            transition: transform 0.3s ease-in-out, background 0.3s ease;
         }
 
-        @media (max-width: 767px) {
-        header { padding: 12px 16px; }
+        /* Desktop: header con più trasparenza quando scrollato */
+        @media (min-width: 768px) {
+            header.scrolled {
+                background: rgba(255, 255, 255, 0.85);
+                box-shadow: 0 4px 12px var(--shadow);
+            }
         }
-        
+
+        /* Mobile: header nascosto quando scroll down */
+        @media (max-width: 767px) {
+            header {
+                padding: 12px 16px;
+            }
+
+            header.hidden {
+                transform: translateY(-100%);
+            }
+        }
+
         .header-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -109,9 +127,24 @@
         .nav-links { display: flex; gap: 24px; }
         .nav-links a { color: var(--muted); text-decoration: none; transition: color 200ms; }
         .nav-links a:hover { color: var(--accent); }
-        
-        main { max-width: 720px; margin: 0 auto; padding: 40px 20px; }
-        @media (min-width: 768px) { main { padding: 60px 32px; } }
+
+        main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        @media (min-width: 768px) {
+            main {
+                padding: 80px 32px 60px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            main {
+                padding: 20px 20px 40px;
+            }
+        }
         
         h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; margin-bottom: 16px; }
         @media (min-width: 768px) { h1 { font-size: 2.8rem; } }
@@ -771,6 +804,51 @@ function onScrollProgress() {
 
 addEventListener('scroll', onScrollProgress, { passive: true });
 addEventListener('resize', onScrollProgress, { passive: true });
+
+// Header Hide/Show on Mobile + Transparency on Desktop
+const header = document.querySelector('header');
+let lastScrollTop = 0;
+let headerTicking = false;
+const isMobile = () => window.innerWidth < 768;
+
+function updateHeader() {
+    const scrollTop = root.scrollTop;
+
+    if (isMobile()) {
+        // Mobile: nascondi header quando scroll down, mostra quando scroll up
+        if (scrollTop > lastScrollTop && scrollTop > 100) {
+            // Scroll down - nascondi
+            header.classList.add('hidden');
+        } else {
+            // Scroll up - mostra
+            header.classList.remove('hidden');
+        }
+    } else {
+        // Desktop: aggiungi classe scrolled per trasparenza
+        if (scrollTop > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    }
+
+    lastScrollTop = scrollTop;
+    headerTicking = false;
+}
+
+function onHeaderScroll() {
+    if (!headerTicking) {
+        requestAnimationFrame(updateHeader);
+        headerTicking = true;
+    }
+}
+
+addEventListener('scroll', onHeaderScroll, { passive: true });
+addEventListener('resize', () => {
+    // Reset classi quando cambia dimensione
+    header.classList.remove('hidden', 'scrolled');
+    lastScrollTop = 0;
+}, { passive: true });
 </script>
 
 </body>
